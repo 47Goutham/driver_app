@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "181285601410",
+    "project_id": "rr-riders",
+    "storage_bucket": "rr-riders.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181285601410:android:ca66a3876a5bfe0576749b",
+        "android_client_info": {
+          "package_name": "com.rrriders.driver_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkBFJwghr-bPEHP_m1OQiEpB6ziPI3y7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
