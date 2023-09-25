@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
+import 'package:driver_app/services/functions.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -10,6 +11,9 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
+  String? phoneNumberError;
+  String phoneNumber = '+374';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,39 +33,53 @@ class _SignInState extends State<SignIn> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                initialValue: '+374',
+                initialValue: phoneNumber,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Phone Number',
+                  errorText: phoneNumberError,
+                ),
+                keyboardType: TextInputType.phone,
+                onChanged: (value) {
+                  phoneNumber = value;
+                },
                 validator: (value) {
                   if (value == null || value.isEmpty || value == '+374') {
                     return 'Please enter phone number';
                   }
-                  else{
-
-                  }
                   return null;
                 },
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Phone Number',
-                ),
-                keyboardType: TextInputType.phone
-
               ),
-
               SizedBox(height: 10),
               ElevatedButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(Colors.yellow),
-                      minimumSize: MaterialStatePropertyAll(
-                        Size(100, 30),
-                      )
+                style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.yellow),
+                  minimumSize: MaterialStatePropertyAll(
+                    Size(100, 30),
                   ),
-                  onPressed: () {
-                    _formKey.currentState?.validate();
-                  },
-                  child: Text(
-                    'Login',
-                    style: TextStyle(color: Colors.black45),
-                  )
+                ),
+
+                onPressed: () async {
+                  final value = _formKey.currentState?.validate();
+                  if (value == true) {
+                    final result = await Functions().checkPhoneNumberExists(phoneNumber);
+                    print(result);
+                    if (result == 'error' || result == 'Phone number not registered') {
+                      setState(() {
+                        phoneNumberError = result;
+                      });
+                    } else {
+                      setState(() {
+                        phoneNumberError = null;
+                      });
+                      // Perform login
+                    }
+                  }
+                },
+                child: Text(
+                  'Login',
+                  style: TextStyle(color: Colors.black45),
+                ),
               )
             ],
           ),

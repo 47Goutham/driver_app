@@ -45,10 +45,11 @@ class YandexApi{
       // Handle the error
       print('Request failed with status: ${response.statusCode}');
       print('Response body: ${response.body}');
+      return null;
     }
   }
 
-  
+
 
   // Future<dynamic> fetchDriverHandCash(String driverId,String fromTime,String toTime) async {
   //   final url = Uri.parse('https://fleet-api.taxi.yandex.net/v2/parks/driver-profiles/transactions/list');
