@@ -9,15 +9,11 @@ class Functions {
      if(result == null) {
        return 'error';
      }
-     print(result);
     for (final profile in result['driver_profiles']){
-       print(profile['driver_profile']['phones'][0]);
-       print(phone);
          if(profile['driver_profile']['phones'][0] == phone){
            return profile['driver_profile']['id'];
          }
     }
-    print('here');
     return 'Phone number not registered';
   }
 

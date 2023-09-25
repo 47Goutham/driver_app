@@ -63,7 +63,6 @@ class _SignInState extends State<SignIn> {
                   final value = _formKey.currentState?.validate();
                   if (value == true) {
                     final result = await Functions().checkPhoneNumberExists(phoneNumber);
-                    print(result);
                     if (result == 'error' || result == 'Phone number not registered') {
                       setState(() {
                         phoneNumberError = result;
