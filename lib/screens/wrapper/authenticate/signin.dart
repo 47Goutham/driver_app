@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:driver_app/services/functions.dart';
+import 'package:driver_app/screens/loading.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -13,12 +13,13 @@ class _SignInState extends State<SignIn> {
   final _formKey = GlobalKey<FormState>();
   String? phoneNumberError;
   String phoneNumber = '+374';
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? const Loading() : Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Sign In',
           style: TextStyle(color: Colors.black45),
         ),
@@ -35,7 +36,7 @@ class _SignInState extends State<SignIn> {
               TextFormField(
                 initialValue: phoneNumber,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                   hintText: 'Phone Number',
                   errorText: phoneNumberError,
                 ),
@@ -50,9 +51,9 @@ class _SignInState extends State<SignIn> {
                   return null;
                 },
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
-                style: ButtonStyle(
+                style: const ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(Colors.yellow),
                   minimumSize: MaterialStatePropertyAll(
                     Size(100, 30),
@@ -62,20 +63,25 @@ class _SignInState extends State<SignIn> {
                 onPressed: () async {
                   final value = _formKey.currentState?.validate();
                   if (value == true) {
+                    setState(() {
+                      loading = true;
+                    });
                     final result = await Functions().checkPhoneNumberExists(phoneNumber);
                     if (result == 'error' || result == 'Phone number not registered') {
                       setState(() {
                         phoneNumberError = result;
+                        loading = false;
                       });
                     } else {
                       setState(() {
                         phoneNumberError = null;
+                        loading = false;
                       });
                       // Perform login
                     }
                   }
                 },
-                child: Text(
+                child: const Text(
                   'Login',
                   style: TextStyle(color: Colors.black45),
                 ),
