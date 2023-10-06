@@ -47,7 +47,7 @@ class _SignInState extends State<SignIn> {
 
       await waitForUserSMSCodeInput();
 
-      print(smsValue);
+
       // Create a PhoneAuthCredential with the code
       PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsValue!);
 
