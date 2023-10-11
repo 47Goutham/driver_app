@@ -3,14 +3,14 @@ class Vehicle {
   String licenseNo;
   String brand;
   String model;
-  String? type;
+  late String type;
 
   Vehicle({required this.id,required this.licenseNo,required this.brand,required this.model}){
 
     if(brand == 'Bike') {
       type = 'Bike';
     } else if ( brand == 'Hyundai' &&  model == 'Solaris'){
-      type = 'Bicycle';
+      type = 'OnFoot';
     }else {
       type = 'Car';
     }
