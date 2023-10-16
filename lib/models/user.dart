@@ -1,19 +1,17 @@
 import 'package:driver_app/models/vehicle.dart';
 
-class User {
+class YandexUser {
 
-  String? uid;
+  String? firebaseUid;
   String yandexId;
   Vehicle? currentVehicle;
   String name;
   String phone;
   String workRuleId;
 
-  User({required this.name, required this.yandexId,required this.phone,required this.workRuleId});
+  YandexUser({required this.name, required this.yandexId,required this.phone,required this.workRuleId,required this.currentVehicle});
 
-  assignVehicle (Vehicle vehicle){
-    currentVehicle = vehicle;
-  }
+
 
 }
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:driver_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:driver_app/services/functions.dart';
@@ -20,6 +21,7 @@ class _SignInState extends State<SignIn> {
   bool loading = false;
   bool smsBox = false;
   String? smsValue;
+  YandexUser? user;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -51,9 +53,16 @@ class _SignInState extends State<SignIn> {
       // Create a PhoneAuthCredential with the code
       PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsValue!);
 
+
       // Sign the user in (or link) with the credential
-     final user =  await _auth.signInWithCredential(credential);
-    print(user);
+     UserCredential firebaseUser =  await _auth.signInWithCredential(credential);
+      if(firebaseUser.user != null ) {
+          user!.firebaseUid = firebaseUser.user!.uid;
+          print(user);
+      }else {
+        print('Error in signing in with Credentials');
+      }
+
 
     },
     codeAutoRetrievalTimeout: (String verificationId) {
@@ -155,6 +164,9 @@ class _SignInState extends State<SignIn> {
                               });
                             } else {
                               // Perform login
+
+                                 user = result;
+
                                verifyPhoneNumber();
                             }
                           } else {
