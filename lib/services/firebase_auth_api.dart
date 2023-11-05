@@ -1,13 +1,21 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
+import 'package:driver_app/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  FirebaseAuth auth =  FirebaseAuth.instance;
+
+
+
+
+
 
   Future<void> signInPhone(String phone, Function(PhoneAuthCredential) verificationCompleted, Function(FirebaseAuthException) verificationFailed, Function(String,int?) codeSent, Function(String) codeAutoRetrievalTimeout) async {
 
-       await   _auth.verifyPhoneNumber(
+       await   auth.verifyPhoneNumber(
             phoneNumber: phone,
             verificationCompleted: verificationCompleted,
             verificationFailed: verificationFailed,

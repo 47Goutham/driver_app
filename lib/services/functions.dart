@@ -14,7 +14,7 @@ class Functions {
     for (final profile in result['driver_profiles']){
          if(profile['driver_profile']['phones'][0] == phone){
 
-        return    YandexUser(name: profile['driver_profile']['first_name'] + ' ' + profile['driver_profile']['last_name'] ,
+        return    UserData(name: profile['driver_profile']['first_name'] + ' ' + profile['driver_profile']['last_name'] ,
                          yandexId: profile['driver_profile']['id'] ,
                          phone: profile['driver_profile']['phones'][0],
                          workRuleId:profile['driver_profile']['work_rule_id'],

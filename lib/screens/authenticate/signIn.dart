@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:driver_app/models/user.dart';
+import 'package:driver_app/services/firebase_auth_api.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:driver_app/services/functions.dart';
 import 'package:driver_app/screens/loading.dart';
@@ -21,9 +23,10 @@ class _SignInState extends State<SignIn> {
   bool loading = false;
   bool smsBox = false;
   String? smsValue;
-  YandexUser? user;
+  UserData? user;
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  
+  final FirebaseAuth _auth = AuthService().auth;
 
   final inputCompleter = Completer<void>();
 
@@ -37,7 +40,9 @@ class _SignInState extends State<SignIn> {
     },
     verificationFailed: (FirebaseAuthException exception) {
       // Handle verification failed
-      print('Phone verification failed: ${exception.message}');
+      if (kDebugMode) {
+        print('Phone verification failed: ${exception.message}');
+      }
     },
     codeSent:  (String verificationId, int? resendToken) async {
       // Update the UI - wait for the user to enter the SMS code
@@ -57,10 +62,12 @@ class _SignInState extends State<SignIn> {
       // Sign the user in (or link) with the credential
      UserCredential firebaseUser =  await _auth.signInWithCredential(credential);
       if(firebaseUser.user != null ) {
-          user!.firebaseUid = firebaseUser.user!.uid;
-          print(user);
+          user!.uid = firebaseUser.user!.uid;
+
       }else {
-        print('Error in signing in with Credentials');
+        if (kDebugMode) {
+          print('Error in signing in with Credentials');
+        }
       }
 
 
