@@ -1,4 +1,5 @@
-import 'package:driver_app/services/firebase_auth_api.dart';
+import 'package:driver_app/services/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -16,7 +17,9 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
          try {
-           await AuthService().auth.signOut();
+           await FirebaseAuthService.auth.signOut();
+
+
          } on Exception catch (e) {
            print('Error in Sign Out');
          }
@@ -29,3 +32,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
