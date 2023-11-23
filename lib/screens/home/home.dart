@@ -1,6 +1,10 @@
+import 'package:driver_app/main.dart';
+import 'package:driver_app/screens/authenticate/phoneNumberInputScreen.dart';
 import 'package:driver_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -17,8 +21,8 @@ class _HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
          try {
-           await FirebaseAuthService.auth.signOut();
-
+           await FirebaseAuthController.auth.signOut();
+           Get.off(() =>PhoneNumberInputPage());
 
          } on Exception catch (e) {
            print('Error in Sign Out');

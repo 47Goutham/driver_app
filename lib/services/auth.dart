@@ -1,30 +1,25 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
-class AuthUser {
-  final User? user;
-  final String? error;
-  AuthUser({this.user,this.error});
-}
-
-
-class FirebaseAuthService {
+class FirebaseAuthController extends GetxController {
   static final FirebaseAuth auth = FirebaseAuth.instance;
+  Rx<User?> firebaseUser = Rx<User?>(null);
 
+  @override
+  void onInit() {
+    firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
+    super.onInit();
+  }
 
-  static Stream<AuthUser> firebaseUserStream = FirebaseAuth.instance
-      .authStateChanges().asyncMap((User? user) async {
-    if (user != null) {
-      try {
-        await user.reload();
-        } on FirebaseAuthException catch (e) {
-            return AuthUser(error: e.message);
-      }
-      return AuthUser(user: user);
-    }
-    return AuthUser(user: user);
-  });
+  Future<String> updateName (String name) async {
+   try {
+     await auth.currentUser?.updateDisplayName(name);
+     return 'success';
+   } on FirebaseAuthException catch (e) {
+     return 'error: ${e.message}';
+   }
+  }
 
 }
-

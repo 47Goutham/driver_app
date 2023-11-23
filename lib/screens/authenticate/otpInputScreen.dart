@@ -1,35 +1,25 @@
 import 'package:driver_app/screens/authenticate/error.dart';
 import 'package:driver_app/screens/authenticate/userNameInputPage.dart';
 import 'package:driver_app/services/auth.dart';
+import 'package:driver_app/services/pageController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:get/get.dart';
 
+class OTPInputPage extends StatelessWidget {
 
-class OTPInputPage extends StatefulWidget {
-  final String verificationId;
+    final String verificationId;
+    OTPInputPage({super.key, required this.verificationId});
+    final MyController myController = Get.find<MyController>() ;
 
-
-  const OTPInputPage({super.key, required this.verificationId});
-
-
-
-  @override
-  OTPInputPageState createState() => OTPInputPageState();
-}
-
-class OTPInputPageState extends State<OTPInputPage> {
-
-  bool loading = false;
-  bool error = false;
-
-  Future<String> signInWithOTP(String otp, String verificationId)  async {
+      Future<String> signInWithOTP(String otp, String verificationId)  async {
     // Create a PhoneAuthCredential with the code
     PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: otp);
 
     // Sign the user in (or link) with the credential  UserCredential firebaseUser =
     try {
-      UserCredential user =  await  FirebaseAuthService.auth.signInWithCredential(credential);
+       await  FirebaseAuthController.auth.signInWithCredential(credential);
 
        return 'success';
 
@@ -44,23 +34,24 @@ class OTPInputPageState extends State<OTPInputPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enter OTP'),
+        title: const Text('Enter OTP'),
+        backgroundColor: Colors.yellow,
+        titleTextStyle: const TextStyle(color: Colors.black45,fontSize: 20,fontFamily: 'Roboto')
       ),
-      body: Center(
+      body: Obx(()=>Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: PinCodeTextField(
                 appContext: context,
-                enabled: !loading,
+                enabled: !myController.otpLoading.value,
                 length: 6,
                 keyboardType: TextInputType.number,
                 pinTheme: PinTheme(
@@ -72,34 +63,27 @@ class OTPInputPageState extends State<OTPInputPage> {
                 ),
 
                 onCompleted: (otp){
-                  setState(() {
-                    loading = true ;
-                  });
+
+                  myController.otpLoading.value = true ;
 
 
-                  signInWithOTP(otp,widget.verificationId).then((value)  {
+
+                  signInWithOTP(otp,verificationId).then((value)  {
                     if(value == 'success') {
 
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(
-                              builder: (context) => UserNameInputPage()
-                          )
+                      Get.off(
+                          () => UserNameInputPage(),
+                          transition: Transition.rightToLeft
                       );
+
                     }else if(value == 'reenterOTP') {
 
-                      setState(() {
-                        loading = false;
-                        error = true ;
-                      });
+                      myController.otpLoading.value = false;
+                      myController.otpError.value = true ;
                     }
 
                     else {
-                      Navigator.pushReplacement(
-                          context,
-                        MaterialPageRoute(
-                          builder: (context) => ErrorMassage(error: value) )
-                        );
-
+                      Get.off(ErrorMassage(error: value));
                     }
                   }) ;
 
@@ -107,16 +91,18 @@ class OTPInputPageState extends State<OTPInputPage> {
                 },
               ),
             ),
-            SizedBox(height: 10),
-            Container(
+            const SizedBox(height: 10),
+            SizedBox(
                 height: 40,
                 width: 200,
-                child: loading ? Center(child: LinearProgressIndicator(color: Colors.black,backgroundColor: Colors.black26,)) : (error ? Center(child: Text('Invalid OTP',style: TextStyle(color: Colors.red),)) : null)
+                child: myController.otpLoading.value ? const Center(child: LinearProgressIndicator(color: Colors.black,backgroundColor: Colors.black26,)) : (myController.otpError.value ? const Center(child: Text('Invalid OTP',style: TextStyle(color: Colors.red),)) : null)
             ),
 
           ],
         ),
-      ),
+      )),
     );
   }
 }
+
+
