@@ -7,7 +7,7 @@ class ErrorMassage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text(error!))
+      body: Center(child: Text(error!,style: const TextStyle(color: Colors.red),))
     );
 
   }

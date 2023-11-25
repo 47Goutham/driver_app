@@ -1,17 +1,20 @@
 import 'package:driver_app/services/auth.dart';
-import 'package:driver_app/services/pageController.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-import 'otpInputScreen.dart';
 
-class PhoneNumberInputPage extends StatelessWidget {
+class PhoneNumberInputPage extends StatefulWidget {
    PhoneNumberInputPage({super.key});
 
+  @override
+  State<PhoneNumberInputPage> createState() => _PhoneNumberInputPageState();
+}
+
+class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
     final TextEditingController phoneNumberController =  TextEditingController(text: '+374');
 
-  final MyController myController = Get.find<MyController>();
+    String? phoneNumberError;
+    bool loading = false;
 
      bool isValidArmenianPhoneNumber(String phoneNumber) {
     // Regular expression for Armenian phone numbers
@@ -21,42 +24,9 @@ class PhoneNumberInputPage extends StatelessWidget {
   }
 
 
-     Future<void> verifyPhoneNumber(String phoneNumber, BuildContext context) async {
-    await FirebaseAuthController.auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) {
-          // Handle verification completed
-          // You are now signed in.
-        },
-        verificationFailed: (FirebaseAuthException exception) {
-          // Handle verification failed
-
-            myController.phoneNumberError.value = exception.message! ;
-            myController.loading.value = false;
-
-
-
-        },
-        codeSent: (String verificationId, int? resendToken) {
-
-          Get.off(
-              () => OTPInputPage(verificationId: verificationId ),
-             transition: Transition.rightToLeft,
-
-          );
-
-
-          },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          // Handle auto retrieval timeout
-          // _firebaseAuth.setVerificationId(verificationId);
-        });
-  }
-
 
   @override
   Widget build(BuildContext context) {
-
 
     return Scaffold(
       appBar: AppBar(
@@ -64,7 +34,7 @@ class PhoneNumberInputPage extends StatelessWidget {
         backgroundColor: Colors.yellow,
         titleTextStyle: const TextStyle(color: Colors.black45,fontSize: 20,fontFamily: 'Roboto')
       ),
-      body: Obx(() =>Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -73,44 +43,76 @@ class PhoneNumberInputPage extends StatelessWidget {
               child: TextFormField(
                 controller: phoneNumberController,
                 keyboardType: TextInputType.phone,
-                keyboardAppearance: Brightness.dark,
                 decoration: InputDecoration(
                   labelText: 'Enter Phone Number',
                   border: const OutlineInputBorder(),
                   hintText: 'Enter Phone Number',
-                  errorText: myController.phoneNumberError.value,
+                  errorText: phoneNumberError,
                 ),
-                readOnly: myController.loading.value,
+                readOnly: loading,
               ),
             ),
             ElevatedButton(
-                onPressed: myController.loading.value
+                onPressed: loading
                     ? null
                     : () async {
                   final phoneNumber = phoneNumberController.text.trim();
 
                   if (phoneNumber.isEmpty || phoneNumber == '+374') {
 
-                    myController.phoneNumberError.value = 'Please enter phone number';
+                    setState(() {
+                      phoneNumberError = 'Please enter phone number';
+                    });
 
                   } else if (!isValidArmenianPhoneNumber(phoneNumber)) {
 
-                    myController.phoneNumberError.value = 'Invalid Armenian Number';
+                    setState(() {
+                      phoneNumberError = 'Invalid Armenian Number';
+                    });
 
                   } else {
 
-                    myController.phoneNumberError.value = null;
-                    myController.loading.value = true;
+                    setState(() {
+                      phoneNumberError = null;
+                      loading = true;
+                    });
+
+                      await  FirebaseAuthService.verifyPhoneNumber(
+                          phoneNumber: phoneNumber,
+                          verificationCompleted: (PhoneAuthCredential credential) {
+                            // Handle verification completed
+                            // You are now signed in.
+                          },
+                          verificationFailed: (FirebaseAuthException exception) {
+                            // Handle verification failed
+
+                            setState(() {
+                              phoneNumberError = exception.message ;
+                              loading = false;
+                            });
 
 
-                    await verifyPhoneNumber(phoneNumber, context);
+
+                          },
+                          codeSent: (String verificationId, int? resendToken) {
+
+                              print('going to otp page');
+                            //navigate to otp page
+
+
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {
+                            // Handle auto retrieval timeout
+                            // _firebaseAuth.setVerificationId(verificationId);
+                          });
+
                   }
                 },
                 child: SizedBox(
                     width: 200,
                     height: 40,
 
-                    child: Center(child: myController.loading.value
+                    child: Center(child: loading
                         ?  LinearProgressIndicator(
                           color: Colors.black,
                           backgroundColor: Colors.black26,
@@ -121,7 +123,7 @@ class PhoneNumberInputPage extends StatelessWidget {
 
           ],
         ),
-      )),
+      ),
     );
 
 

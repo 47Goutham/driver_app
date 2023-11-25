@@ -1,25 +1,38 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
 
-class FirebaseAuthController extends GetxController {
-  static final FirebaseAuth auth = FirebaseAuth.instance;
-  Rx<User?> firebaseUser = Rx<User?>(null);
+class FirebaseAuthService  {
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  @override
-  void onInit() {
-    firebaseUser.bindStream(FirebaseAuth.instance.authStateChanges());
-    super.onInit();
-  }
 
-  Future<String> updateName (String name) async {
+
+ static Future<String> updateName (String name) async {
    try {
-     await auth.currentUser?.updateDisplayName(name);
+     await _auth.currentUser?.updateDisplayName(name);
      return 'success';
    } on FirebaseAuthException catch (e) {
-     return 'error: ${e.message}';
+     return Future.error('Error: ${e.message}');
    }
   }
+
+  static Future<String> reloadUser()   async {
+   try {
+     await _auth.currentUser?.reload();
+     return 'success';
+   } on FirebaseAuthException catch (e) {
+     return Future.error('Error: ${e.message}');
+   }
+ }
+
+ static User? currentFirebaseUser(){
+   return _auth.currentUser ;
+ }
+
+ static Future<void> verifyPhoneNumber({required String phoneNumber,required void Function(PhoneAuthCredential) verificationCompleted,required void Function(FirebaseAuthException) verificationFailed,required void Function(String, int?) codeSent,required void Function(String) codeAutoRetrievalTimeout })async {
+
+   await  _auth.verifyPhoneNumber(verificationCompleted: verificationCompleted, verificationFailed: verificationFailed, codeSent: codeSent, codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
+
+ }
 
 }
