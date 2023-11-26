@@ -100,8 +100,9 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
                             },
                             codeSent:
                                 (String verificationId, int? resendToken) {
-                              print('going to otp page');
                               //navigate to otp page
+
+
                             },
                             codeAutoRetrievalTimeout: (String verificationId) {
                               // Handle auto retrieval timeout
