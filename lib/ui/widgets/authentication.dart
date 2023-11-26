@@ -1,3 +1,4 @@
+import 'package:driver_app/ui/screens/authenticate/phoneNumberInputScreen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -6,6 +7,6 @@ class Authentication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return PhoneNumberInputPage();
   }
 }

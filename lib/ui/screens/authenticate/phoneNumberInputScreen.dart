@@ -2,8 +2,15 @@ import 'package:driver_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+
+import 'package:flutter/material.dart';
+
+
+
+
+
 class PhoneNumberInputPage extends StatefulWidget {
-  PhoneNumberInputPage({super.key});
+  const PhoneNumberInputPage({super.key});
 
   @override
   State<PhoneNumberInputPage> createState() => _PhoneNumberInputPageState();
@@ -26,11 +33,17 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
           title: const Text('Enter Phone Number'),
           backgroundColor: Colors.yellow,
           titleTextStyle: const TextStyle(
-              color: Colors.black45, fontSize: 20, fontFamily: 'Roboto')),
+              color: Colors.black45, fontSize: 20, fontFamily: 'Roboto'),
+          actions: [
+            Hero(tag: 'hero_logo',
+            child: Image.asset('assets/images/logo.png'))
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

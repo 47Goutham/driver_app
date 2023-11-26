@@ -8,10 +8,10 @@ import 'home.dart';
 class Wrapper extends StatelessWidget {
   const Wrapper({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     final firebaseUser =  FirebaseAuthService.currentFirebaseUser();
-    return firebaseUser == null ? Authentication() : Home() ;
+    return firebaseUser == null ? const Authentication() : const Home() ;
   }
 }
+
