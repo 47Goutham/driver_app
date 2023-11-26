@@ -23,7 +23,7 @@ class _OTPInputPageState extends State<OTPInputPage> {
         title: const Text('Enter OTP'),
         backgroundColor: Colors.yellow,
         titleTextStyle: const TextStyle(
-            color: Colors.black45, fontSize: 20, fontFamily: 'Roboto'),
+            color: Colors.black54, fontSize: 20, fontFamily: 'Roboto'),
         actions: [Image.asset('assets/images/logo.png')],
       ),
       body: Center(
@@ -45,18 +45,25 @@ class _OTPInputPageState extends State<OTPInputPage> {
                   activeFillColor: Colors.white,
                 ),
                 onCompleted: (otp) {
-                  otpLoading = true;
+                  setState(() {
+                    otpLoading = true;
+                  });
 
                   FirebaseAuthService.signInWithOTP(
                           verificationId: widget.verificationId, otp: otp)
                       .then((result) {
                     if (result == 'success') {
-                      //NAVIGATE TO USERNAMEINPUTPAGE
 
+
+
+                      //NAVIGATE TO USERNAMEINPUTPAGE
+                     print('should navigate to username');
 
                     } else if (result == 'reenterOTP') {
-                      otpLoading = false;
-                      otpError = true;
+                      setState(() {
+                        otpLoading = false;
+                        otpError = true;
+                      });
                     } else {
 
                       //NAVIGATE TO ERROR PAGE

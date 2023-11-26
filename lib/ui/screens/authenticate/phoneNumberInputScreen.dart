@@ -1,9 +1,9 @@
 import 'package:driver_app/services/auth.dart';
+import 'package:driver_app/ui/screens/authenticate/otpInputScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 
-import 'package:flutter/material.dart';
 
 
 
@@ -38,7 +38,7 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
           title: const Text('Enter Phone Number'),
           backgroundColor: Colors.yellow,
           titleTextStyle: const TextStyle(
-              color: Colors.black45, fontSize: 20, fontFamily: 'Roboto'),
+              color: Colors.black54, fontSize: 20, fontFamily: 'Roboto'),
           actions: [
             Hero(tag: 'hero_logo',
             child: Image.asset('assets/images/logo.png'))
@@ -67,7 +67,7 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
                   ? null
                   : () async {
                       final phoneNumber = phoneNumberController.text.trim();
-
+                 print('ajhjasd');
                       if (phoneNumber.isEmpty || phoneNumber == '+374') {
                         setState(() {
                           phoneNumberError = 'Please enter phone number';
@@ -82,7 +82,7 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
                           loading = true;
                         });
 
-                        await FirebaseAuthService.verifyPhoneNumber(
+                         FirebaseAuthService.verifyPhoneNumber(
                             phoneNumber: phoneNumber,
                             verificationCompleted:
                                 (PhoneAuthCredential credential) {
@@ -101,6 +101,26 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
                             codeSent:
                                 (String verificationId, int? resendToken) {
                               //navigate to otp page
+                                  setState(() {
+                                    loading = false;
+                                  });
+
+                                  Navigator.of(context).push(
+                                    PageRouteBuilder<void>(
+                                      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                                        const Offset begin = Offset(1.0, 0.0); // starting position (right of the screen)
+                                        const Offset end = Offset(0.0, 0.0); // ending position (left of the screen)
+                                        var tween = Tween(begin: begin, end: end);
+
+                                        var offsetAnimation = animation.drive(tween);
+                                        return SlideTransition(
+                                            position: offsetAnimation,
+                                            child: OTPInputPage(verificationId: verificationId)
+                                        );
+                                      },
+                                      transitionDuration: Duration(milliseconds: 500), // Increase the duration to slow down the animation
+                                    ),
+                                  );
 
 
                             },
@@ -108,6 +128,7 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
                               // Handle auto retrieval timeout
                               // _firebaseAuth.setVerificationId(verificationId);
                             });
+
                       }
                     },
               style: ButtonStyle(

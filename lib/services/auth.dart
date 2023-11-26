@@ -27,13 +27,14 @@ class FirebaseAuthService {
     return _auth.currentUser;
   }
 
-  static Future<void> verifyPhoneNumber(
+  static void verifyPhoneNumber(
       {required String phoneNumber,
       required void Function(PhoneAuthCredential) verificationCompleted,
       required void Function(FirebaseAuthException) verificationFailed,
       required void Function(String, int?) codeSent,
-      required void Function(String) codeAutoRetrievalTimeout}) async {
-    await _auth.verifyPhoneNumber(
+      required void Function(String) codeAutoRetrievalTimeout})  {
+     _auth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
         verificationCompleted: verificationCompleted,
         verificationFailed: verificationFailed,
         codeSent: codeSent,

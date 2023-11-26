@@ -25,11 +25,11 @@ class _SplashScreenState extends State<SplashScreen>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
     );
 
     _animation = Tween<double>(begin: 500, end: 300).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
     );
 
     _controller.forward();
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen>
         .then((_) {
       Future.wait([
         FirebaseAuthService.reloadUser(),
-        Future.delayed(const Duration(seconds: 4))
+        Future.delayed(const Duration(seconds: 3))
       ]).then((_) {
         //NAVIGATE TO NEXT SCREEN
         Navigator.of(context).pushReplacement(
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: Wrapper()
               );
             },
-            transitionDuration: Duration(seconds: 2), // Increase the duration to slow down the animation
+            transitionDuration: Duration(seconds: 1,milliseconds: 500), // Increase the duration to slow down the animation
           ),
         );
       }).catchError((error) {
@@ -77,6 +77,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: AnimatedBuilder(
         animation: _controller,
         builder: (context, child) {
