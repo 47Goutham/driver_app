@@ -1,11 +1,11 @@
-import 'package:driver_app/UI/screens/error.dart';
+import 'package:driver_app/UI/screens/error_page.dart';
 import 'package:driver_app/UI/widgets/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 import '../../firebase_options.dart';
 import '../../services/auth.dart';
-import 'authenticate/phoneNumberInputScreen.dart';
+import 'authenticate/phone_number_input_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

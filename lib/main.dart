@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'UI/screens/splashscreen.dart';
+import 'UI/screens/splash_page.dart';
 
 Future<void> main() async {
   runApp(const MaterialApp(

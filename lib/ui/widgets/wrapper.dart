@@ -1,8 +1,8 @@
 import 'package:driver_app/services/auth.dart';
+import 'package:driver_app/ui/widgets/home_wrapper.dart';
 import 'package:flutter/material.dart';
-
+import '../screens/home/company_selection_page.dart';
 import 'authentication.dart';
-import 'home.dart';
 
 
 class Wrapper extends StatelessWidget {
@@ -10,8 +10,8 @@ class Wrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final firebaseUser =  FirebaseAuthService.currentFirebaseUser();
-    return firebaseUser == null ? const Authentication() : const Home() ;
+    return CompanySelectionPage();
+  //  return FirebaseAuthService.currentFirebaseUser() == null ? const Authentication() :  const HomeWrapper() ;
   }
 }
 

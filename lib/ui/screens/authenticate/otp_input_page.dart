@@ -1,8 +1,9 @@
 import 'package:driver_app/services/auth.dart';
+import 'package:driver_app/ui/screens/home/user_name_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../error.dart';
+import '../error_page.dart';
 
 class OTPInputPage extends StatefulWidget {
   final String verificationId;
@@ -57,7 +58,23 @@ class _OTPInputPageState extends State<OTPInputPage> {
 
 
                       //NAVIGATE TO USERNAMEINPUTPAGE
-                     print('should navigate to username');
+                      Navigator.of(context).pushAndRemoveUntil(
+                        PageRouteBuilder<void>(
+                          pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                            const Offset begin = Offset(1.0, 0.0); // starting position (right of the screen)
+                            const Offset end = Offset(0.0, 0.0); // ending position (left of the screen)
+                            var tween = Tween(begin: begin, end: end);
+
+                            var offsetAnimation = animation.drive(tween);
+                            return SlideTransition(
+                                position: offsetAnimation,
+                                child: UserNameInputPage()
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 500), // Increase the duration to slow down the animation
+                        ),
+                       (Route<dynamic> route) => false
+                      );
 
                     } else if (result == 'reenterOTP') {
                       setState(() {

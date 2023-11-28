@@ -1,4 +1,4 @@
-import 'package:driver_app/ui/screens/authenticate/phoneNumberInputScreen.dart';
+import 'package:driver_app/ui/screens/authenticate/phone_number_input_page.dart';
 import 'package:flutter/material.dart';
 
 
