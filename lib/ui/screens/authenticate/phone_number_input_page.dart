@@ -1,4 +1,5 @@
 import 'package:driver_app/services/auth.dart';
+import 'package:driver_app/services/helper_functions.dart';
 import 'package:driver_app/ui/screens/authenticate/otp_input_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +24,7 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
   String? phoneNumberError;
   bool loading = false;
 
-  bool isValidArmenianPhoneNumber(String phoneNumber) {
-    // Regular expression for Armenian phone numbers
-    RegExp armenianPhoneNumberRegExp = RegExp(r'^\+374\d{8}$');
 
-    return armenianPhoneNumberRegExp.hasMatch(phoneNumber);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +63,12 @@ class _PhoneNumberInputPageState extends State<PhoneNumberInputPage> {
                   ? null
                   : () async {
                       final phoneNumber = phoneNumberController.text.trim();
-                 print('ajhjasd');
+
                       if (phoneNumber.isEmpty || phoneNumber == '+374') {
                         setState(() {
                           phoneNumberError = 'Please enter phone number';
                         });
-                      } else if (!isValidArmenianPhoneNumber(phoneNumber)) {
+                      } else if (!HelperFunctions.isValidArmenianPhoneNumber(phoneNumber)) {
                         setState(() {
                           phoneNumberError = 'Invalid Armenian Number';
                         });

@@ -2,7 +2,7 @@ import 'package:driver_app/models/user.dart';
 import 'package:driver_app/models/vehicle.dart';
 import 'package:driver_app/services/yandex_api.dart';
 
-class Functions {
+class HelperFunctions {
   final api = YandexApi();
    Future<dynamic> checkPhoneNumberExists (String phone) async {
 
@@ -23,6 +23,13 @@ class Functions {
          }
     }
     return 'Phone number not registered';
+  }
+
+ static bool isValidArmenianPhoneNumber(String phoneNumber) {
+    // Regular expression for Armenian phone numbers
+    RegExp armenianPhoneNumberRegExp = RegExp(r'^\+374\d{8}$');
+
+    return armenianPhoneNumberRegExp.hasMatch(phoneNumber);
   }
 
 }

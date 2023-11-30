@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'UI/screens/splash_page.dart';
 
 Future<void> main() async {
-  runApp(const MaterialApp(
+  runApp( MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Material(child: SplashScreen())));
+      //theme: ThemeData(useMaterial3: true),
+      home: const SplashScreen()));
 }

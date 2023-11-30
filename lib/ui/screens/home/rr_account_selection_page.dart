@@ -1,19 +1,20 @@
 import 'package:driver_app/services/auth.dart';
+import 'package:driver_app/services/helper_functions.dart';
 import 'package:flutter/material.dart';
 
 class AccountSelectionPage extends StatefulWidget {
-  const AccountSelectionPage({super.key});
+  AccountSelectionPage({super.key});
 
   @override
   State<AccountSelectionPage> createState() => _AccountSelectionPageState();
 }
 
 class _AccountSelectionPageState extends State<AccountSelectionPage> {
-
-  final TextEditingController phoneNumberController =  TextEditingController(text: '+374');
+  final TextEditingController phoneNumberController = TextEditingController(text: FirebaseAuthService.currentFirebaseUser()?.phoneNumber);
 
   String? phoneNumberError;
   bool loading = false;
+  List<bool> selected = [true, false];
 
   @override
   Widget build(BuildContext context) {
@@ -28,84 +29,111 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
             child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ToggleButtons(children: [
-              Text(
-                'Own Account',
-                style: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.w400),
-              ),
-              Text(
-                'Other\'s Account',
-                style: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.w400),
-              )
-            ],
-                direction: Axis.horizontal,
-                isSelected: [true,false],
+            ToggleButtons(
+              onPressed: loading ? null : (button) {
+                switch (button) {
+                  case 0:
+                    setState(() {
+                      phoneNumberController.text = (FirebaseAuthService.currentFirebaseUser()!.phoneNumber)!;
+                      selected[0] = true;
+                      selected[1] = false;
+                      phoneNumberError = null;
+                    });
 
+                  case 1:
+                    setState(() {
+                      phoneNumberController.text = '+374';
+                      selected[0] = false;
+                      selected[1] = true;
+                      phoneNumberError = null;
+                    });
+                }
+              },
+              direction: Axis.horizontal,
+              isSelected: selected,
               borderRadius: const BorderRadius.all(Radius.circular(8)),
-              selectedBorderColor: Colors.red[700],
-              selectedColor: Colors.white,
-              fillColor: Colors.red[200],
-              color: Colors.red[400],
-              constraints: const BoxConstraints(
-                minHeight: 40.0,
-                minWidth: 80.0,
-              ),
-
-
+              selectedBorderColor: Colors.yellow,
+              selectedColor: Colors.yellow[100],
+              fillColor: Colors.yellow,
+              color: Colors.green,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Own Account',
+                    style: TextStyle(color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Other\'s Account',
+                    style: TextStyle(color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w400),
+                  ),
+                )
+              ],
             ),
-
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
-            TextFormField(
-              controller: phoneNumberController,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                labelText: 'Enter Phone Number',
-                border: const OutlineInputBorder(),
-                hintText: 'Enter Phone Number',
-                errorText: phoneNumberError,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TextFormField(
+                controller: phoneNumberController,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  labelText: 'Enter Phone Number',
+                  border: const OutlineInputBorder(),
+                  hintText: 'Enter Phone Number',
+                  errorText: phoneNumberError,
+                ),
+                readOnly: loading || selected[0],
               ),
-              readOnly: loading,
             ),
-
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             ElevatedButton(
-                onPressed: () {},
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow), minimumSize: MaterialStateProperty.all(Size(300, 80))),
-                child: Text('Other\'s Account', style: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.w400))),
+                onPressed: loading
+                    ? null
+                    : () async {
+                        final phoneNumber = phoneNumberController.text.trim();
 
-            // SizedBox(height: 30,),
-            // TextFormField(
-            //   controller: phoneNumberController,
-            //   keyboardType: TextInputType.phone,
-            //   decoration: InputDecoration(
-            //     labelText: 'Enter Phone Number',
-            //     border: const OutlineInputBorder(),
-            //     hintText: 'Enter Phone Number',
-            //     errorText: phoneNumberError,
-            //   ),
-            //   readOnly: loading,
-            // ),
-            // SizedBox(height: 30,),
-            // SizedBox(
-            //     height: 40,
-            //     width: 200,
-            //     child: otpLoading
-            //         ? const Center(
-            //         child: LinearProgressIndicator(
-            //           color: Colors.black,
-            //           backgroundColor: Colors.black26,
-            //         ))
-            //         : (otpError
-            //         ? const Center(
-            //         child: Text(
-            //           'Invalid OTP',
-            //           style: TextStyle(color: Colors.red),
-            //         ))
-            //         : null))
+                        if (phoneNumber.isEmpty || phoneNumber == '+374') {
+                          setState(() {
+                            phoneNumberError = 'Please enter phone number';
+                          });
+                        } else if (!HelperFunctions.isValidArmenianPhoneNumber(phoneNumber)) {
+                          setState(() {
+                            phoneNumberError = 'Invalid Armenian Number';
+                          });
+                        } else if(phoneNumber == FirebaseAuthService.currentFirebaseUser()!.phoneNumber && selected[1] == true  ){
+                          setState(() {
+                            phoneNumberError = 'This is your Own Account number';
+                          });
+                        }else {
+                          setState(() {
+                            phoneNumberError = null;
+                            loading = true;
+                          });
+
+
+
+                        }
+                      },
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow)),
+                child: SizedBox(
+                  height: 40,
+                  width: 200,
+                  child: Center(
+                    child: loading
+                        ? const LinearProgressIndicator(
+                            color: Colors.black,
+                            backgroundColor: Colors.black26,
+                          )
+                        : const Text('Next', style: TextStyle(color: Colors.black54, fontSize: 25, fontWeight: FontWeight.w400)),
+                  ),
+                )),
           ],
         )));
   }
