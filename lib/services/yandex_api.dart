@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 
@@ -15,19 +16,28 @@ class YandexApi {
       'Content-Type': 'application/json',
     };
 
-    final  response = await http.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(requestBody),
-    );
+    try {
+      final  response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: jsonEncode(requestBody),
+      );
 
-    if (response.statusCode == 200) {
-      // Successfully received a response
-      final jsonResponse = json.decode(response.body);
-      return jsonResponse;
-    } else {
-      return Future.error(response.body);
+      if (response.statusCode == 200) {
+        // Successfully received a response
+        final jsonResponse = json.decode(response.body);
+        return jsonResponse;
+      } else {
+        return Future.error('Error: ${response.statusCode}');
+      }
+
+    } on SocketException catch (e) {
+      return Future.error('No Internet Connection');
+    } on Exception catch  (e){
+      return Future.error(e.toString());
     }
+
+
   }
 
   static Future<dynamic> fetchDriverProfiles() async {

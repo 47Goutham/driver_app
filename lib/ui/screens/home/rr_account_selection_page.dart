@@ -2,8 +2,13 @@ import 'package:driver_app/services/auth.dart';
 import 'package:driver_app/services/helper_functions.dart';
 import 'package:flutter/material.dart';
 
+import 'package:driver_app/ui/widgets/user_data_inherited_widget.dart';
+
+import 'home.dart';
+
+
 class AccountSelectionPage extends StatefulWidget {
-  AccountSelectionPage({super.key});
+  const AccountSelectionPage({super.key});
 
   @override
   State<AccountSelectionPage> createState() => _AccountSelectionPageState();
@@ -18,6 +23,7 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('Choose Yandex Account'),
@@ -30,25 +36,27 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ToggleButtons(
-              onPressed: loading ? null : (button) {
-                switch (button) {
-                  case 0:
-                    setState(() {
-                      phoneNumberController.text = (FirebaseAuthService.currentFirebaseUser()!.phoneNumber)!;
-                      selected[0] = true;
-                      selected[1] = false;
-                      phoneNumberError = null;
-                    });
+              onPressed: loading
+                  ? null
+                  : (button) {
+                      switch (button) {
+                        case 0:
+                          setState(() {
+                            phoneNumberController.text = (FirebaseAuthService.currentFirebaseUser()!.phoneNumber)!;
+                            selected[0] = true;
+                            selected[1] = false;
+                            phoneNumberError = null;
+                          });
 
-                  case 1:
-                    setState(() {
-                      phoneNumberController.text = '+374';
-                      selected[0] = false;
-                      selected[1] = true;
-                      phoneNumberError = null;
-                    });
-                }
-              },
+                        case 1:
+                          setState(() {
+                            phoneNumberController.text = '+374';
+                            selected[0] = false;
+                            selected[1] = true;
+                            phoneNumberError = null;
+                          });
+                      }
+                    },
               direction: Axis.horizontal,
               isSelected: selected,
               borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -96,7 +104,7 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
             ElevatedButton(
                 onPressed: loading
                     ? null
-                    : () async {
+                    : ()  {
                         final phoneNumber = phoneNumberController.text.trim();
 
                         if (phoneNumber.isEmpty || phoneNumber == '+374') {
@@ -107,11 +115,11 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
                           setState(() {
                             phoneNumberError = 'Invalid Armenian Number';
                           });
-                        } else if(phoneNumber == FirebaseAuthService.currentFirebaseUser()!.phoneNumber && selected[1] == true  ){
+                        } else if (phoneNumber == FirebaseAuthService.currentFirebaseUser()!.phoneNumber && selected[1] == true) {
                           setState(() {
                             phoneNumberError = 'This is your Own Account number';
                           });
-                        }else {
+                        } else {
                           setState(() {
                             phoneNumberError = null;
                             loading = true;
@@ -119,6 +127,26 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
 
 
 
+                          HelperFunctions.checkPhoneNumberExists(phoneNumber, UserDataInheritedWidget.of(context).userData).then((val) {
+                            Navigator.of(context).pushReplacement(
+                              PageRouteBuilder<void>(
+                                pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                                  const Offset begin = Offset(1.0, 0.0); // starting position (right of the screen)
+                                  const Offset end = Offset(0.0, 0.0); // ending position (left of the screen)
+                                  var tween = Tween(begin: begin, end: end);
+
+                                  var offsetAnimation = animation.drive(tween);
+                                  return SlideTransition(position: offsetAnimation, child: const Home());
+                                },
+                                transitionDuration: const Duration(milliseconds: 500), // Increase the duration to slow down the animation
+                              ),
+                            );
+                          }).catchError((err) {
+                            setState(() {
+                              phoneNumberError = err;
+                              loading = false;
+                            });
+                          });
                         }
                       },
                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow)),

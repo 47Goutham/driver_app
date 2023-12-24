@@ -3,6 +3,7 @@ import 'package:driver_app/ui/screens/home/home.dart';
 import 'package:driver_app/ui/widgets/home_wrapper.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/user_data_inherited_widget.dart';
 import '../error_page.dart';
 
 class UserNameInputPage extends StatefulWidget {
@@ -22,6 +23,9 @@ class _UserNameInputPageState extends State<UserNameInputPage> {
   void initState() {
     super.initState();
     userNameController.text = displayName ?? '';
+
+
+
   }
 
   @override
@@ -65,6 +69,7 @@ class _UserNameInputPageState extends State<UserNameInputPage> {
                       });
 
                       FirebaseAuthService.updateName(userNameController.text.trim()).then((_) {
+                        UserDataInheritedWidget.of(context).userData.nameReal = FirebaseAuthService.currentFirebaseUser()?.displayName;
                           //navigate to  home
                         Navigator.of(context).pushReplacement(
                           PageRouteBuilder<void>(

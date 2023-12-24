@@ -1,4 +1,5 @@
 import 'package:driver_app/UI/screens/error_page.dart';
+import 'package:driver_app/UI/screens/home/rr_account_selection_page.dart';
 import 'package:driver_app/UI/widgets/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class _SplashScreenState extends State<SplashScreen>
               return FadeTransition(
                   opacity: animation,
                   child: Wrapper()
+                 // child: AccountSelectionPage()
               );
             },
             transitionDuration: Duration(seconds: 1,milliseconds: 500), // Increase the duration to slow down the animation

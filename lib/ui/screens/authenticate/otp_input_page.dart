@@ -3,6 +3,7 @@ import 'package:driver_app/ui/screens/home/user_name_input_page.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../widgets/user_data_inherited_widget.dart';
 import '../error_page.dart';
 
 class OTPInputPage extends StatefulWidget {
@@ -55,6 +56,8 @@ class _OTPInputPageState extends State<OTPInputPage> {
                       .then((result) {
                     if (result == 'success') {
 
+                      UserDataInheritedWidget.of(context).userData.uid = FirebaseAuthService.currentFirebaseUser()?.uid;
+                      UserDataInheritedWidget.of(context).userData.phoneNumberReal = FirebaseAuthService.currentFirebaseUser()?.phoneNumber;
 
 
                       //NAVIGATE TO USERNAMEINPUTPAGE
