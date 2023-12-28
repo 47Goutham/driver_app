@@ -28,14 +28,76 @@ class _VehicleSelectionPageState extends State<VehicleSelectionPage> {
                   enableFilter: true,
                   enableSearch: true,
                   requestFocusOnTap: true,
+                  width: 300,
+                 label: Text('Select Vehicle'),
+                 inputDecorationTheme: InputDecorationTheme(
+                   // fillColor: Colors.yellow[50],
+                   // filled: true,
+                   border: OutlineInputBorder(
+
+                   ) ,
+                   focusedBorder: OutlineInputBorder(
+                     borderSide: BorderSide(
+                       color: Colors.black45, // Set your desired border color
+                     ),
+                   ),
+
+                 ),
                   dropdownMenuEntries: [
-                     DropdownMenuEntry(value: 'Goutham', label: 'Goutham'),
-                    DropdownMenuEntry(value: 'Nana', label: 'nana'),
-                    DropdownMenuEntry(value: 'Julia', label: 'Julia'),
-                    DropdownMenuEntry(value: 'Park', label: 'Park'),
-                    DropdownMenuEntry(value: 'Disha', label: 'Disha'),
+                     DropdownMenuEntry(value: 'Goutham', label: 'Goutham',
+
+                     style: ButtonStyle(
+                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                         RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(10),
+                           side: BorderSide(color: Colors.black45),
+                         ),
+                       ),
+                     ),
+
+
+                     ),
+                    DropdownMenuEntry(value: 'Nana', label: 'nana', style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Colors.black45),
+                        ),
+                      ),
+                    )),
+                    DropdownMenuEntry(value: 'Julia', label: 'Julia', style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Colors.black45),
+                        ),
+                      ),
+                    )),
+                    DropdownMenuEntry(value: 'Park', label: 'Park', style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Colors.black45),
+                        ),
+                      ),
+                    )),
+                    DropdownMenuEntry(value: 'Disha', label: 'Disha', style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Colors.black45),
+                        ),
+                      ),
+                    )),
                   ],
-                )
+                  menuStyle: MenuStyle(
+
+                    elevation: MaterialStateProperty.all(0),
+                    backgroundColor: MaterialStateProperty.all(Colors.white)
+                    ),
+
+                  ),
+
                 // ElevatedButton(
                 //     onPressed: loading
                 //         ? null
