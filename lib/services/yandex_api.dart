@@ -58,7 +58,42 @@ class YandexApi {
     return _yandexApiPost(url: url, requestBody: requestBody) ;
   }
 
-  // Future<dynamic> fetchDriverHandCash(String driverId,String fromTime,String toTime) async {
+  static Future<dynamic> fetchVehicles() async {
+
+    String url = 'https://fleet-api.taxi.yandex.net/v1/parks/cars/list';
+
+    final requestBody = {
+
+      "limit": 1000,
+      "fields": {
+        "car" : [
+          "brand",
+          "model",
+          "normalized_number"
+
+        ]
+
+      },
+
+      "query": {
+        "park": {
+          "car": {
+            "status": [
+              "working"
+            ]
+          },
+          "id": _partnerId
+        }
+
+      }
+    };
+
+    return _yandexApiPost(url: url, requestBody: requestBody) ;
+  }
+
+
+
+// Future<dynamic> fetchDriverHandCash(String driverId,String fromTime,String toTime) async {
   //   final url = Uri.parse('https://fleet-api.taxi.yandex.net/v2/parks/driver-profiles/transactions/list');
   //
   //   final headers = {

@@ -34,6 +34,34 @@ class HelperFunctions {
    }
 
 
+  static Future<List<Vehicle>> fetchVehicles () async {
+    try {
+      final result = await YandexApi.fetchVehicles();
+      List<Vehicle> vehicles = [];
+
+      for (final car in result['cars']) {
+
+
+        Vehicle vehicle =  Vehicle(id: car['id'], licenseNo: car['normalized_number'], brand:  car['brand'], model: car['model']) ;
+
+          if(vehicle.type != 'OnFoot' ){
+            vehicles.add(vehicle);
+          }
+
+      }
+
+      if (vehicles.isEmpty) {
+        throw 'No Vehicles Found';
+      }else{
+        return vehicles;
+      }
+
+    } on Exception catch (e) {
+      return Future.error(e);
+    }
+  }
+
+
 
  static bool isValidArmenianPhoneNumber(String phoneNumber) {
     // Regular expression for Armenian phone numbers
