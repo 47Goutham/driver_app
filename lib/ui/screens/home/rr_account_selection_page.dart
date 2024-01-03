@@ -1,10 +1,10 @@
 import 'package:driver_app/services/auth.dart';
 import 'package:driver_app/services/helper_functions.dart';
+import 'package:driver_app/ui/screens/home/vehicle_selection_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:driver_app/ui/widgets/user_data_inherited_widget.dart';
 
-import 'home.dart';
 
 
 class AccountSelectionPage extends StatefulWidget {
@@ -136,9 +136,9 @@ class _AccountSelectionPageState extends State<AccountSelectionPage> {
                                   var tween = Tween(begin: begin, end: end);
 
                                   var offsetAnimation = animation.drive(tween);
-                                  return SlideTransition(position: offsetAnimation, child: const Home());
+                                  return SlideTransition(position: offsetAnimation, child: const VehicleSelectionPage());
                                 },
-                                transitionDuration: const Duration(milliseconds: 500), // Increase the duration to slow down the animation
+                                transitionDuration: const Duration(milliseconds: 300), // Increase the duration to slow down the animation
                               ),
                             );
                           }).catchError((err) {

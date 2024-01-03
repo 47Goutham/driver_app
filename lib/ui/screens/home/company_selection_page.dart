@@ -1,7 +1,7 @@
 import 'package:driver_app/UI/screens/home/rr_account_selection_page.dart';
+import 'package:driver_app/ui/screens/home/vehicle_selection_page.dart';
 import 'package:flutter/material.dart';
 
-import '../../../services/auth.dart';
 import 'package:driver_app/ui/widgets/user_data_inherited_widget.dart';
 
 class CompanySelectionPage extends StatelessWidget {
@@ -37,27 +37,44 @@ class CompanySelectionPage extends StatelessWidget {
                         var offsetAnimation = animation.drive(tween);
                         return SlideTransition(
                             position: offsetAnimation,
-                            child: AccountSelectionPage()
+                            child: const AccountSelectionPage()
                         );
                       },
-                      transitionDuration: Duration(milliseconds: 500), // Increase the duration to slow down the animation
+                      transitionDuration: const Duration(milliseconds: 300), // Increase the duration to slow down the animation
                     ),
                   );
 
                 },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow), minimumSize: MaterialStateProperty.all(Size(300, 80))),
-                child: Text(
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow), minimumSize: MaterialStateProperty.all(const Size(300, 80))),
+                child: const Text(
                   'RR',
                   style: TextStyle(color: Colors.black54,fontSize: 25 ,fontWeight: FontWeight.w400),
                 )),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             ElevatedButton(
                 onPressed: () {
                   UserDataInheritedWidget.of(context).userData.workingCompany = 'JACOB KITCHEN';
 
+                  Navigator.of(context).pushReplacement(
+                    PageRouteBuilder<void>(
+                      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+                        const Offset begin = Offset(1.0, 0.0); // starting position (right of the screen)
+                        const Offset end = Offset(0.0, 0.0); // ending position (left of the screen)
+                        var tween = Tween(begin: begin, end: end);
+
+                        var offsetAnimation = animation.drive(tween);
+                        return SlideTransition(
+                            position: offsetAnimation,
+                            child: const VehicleSelectionPage()
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 300), // Increase the duration to slow down the animation
+                    ),
+                  );
+
                 },
-                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow), minimumSize: MaterialStateProperty.all(Size(300, 80))),
-                child: Text('JACOB KITCHEN', style: TextStyle(color: Colors.black54,fontSize: 25,fontWeight: FontWeight.w400))),
+                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.yellow), minimumSize: MaterialStateProperty.all(const Size(300, 80))),
+                child: const Text('JACOB KITCHEN', style: TextStyle(color: Colors.black54,fontSize: 25,fontWeight: FontWeight.w400))),
           ],
         )));
   }
