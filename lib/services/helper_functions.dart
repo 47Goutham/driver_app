@@ -19,10 +19,11 @@ class HelperFunctions {
            userData.yandexId =  profile['driver_profile']['id'];
            userData.phoneNumberYandex = profile['driver_profile']['phones'][0];
            userData.workRuleId = profile['driver_profile']['work_rule_id'] ;
-           userData.currentVehicleInYandex = profile['driver_profile']['car'] != null ? Vehicle(id: profile['driver_profile']['car']['id'],
-                   licenseNo: profile['driver_profile']['car']['number'],
-                   brand: profile['driver_profile']['car']['brand'],
-                   model: profile['driver_profile']['car']['model']) : null ;
+
+           userData.currentVehicleInYandex = profile['car'] != null ? Vehicle(id: profile['car']['id'],
+                   licenseNo: profile['car']['number'],
+                   brand: profile['car']['brand'],
+                   model: profile['car']['model']) : null ;
            return ;
 
          }

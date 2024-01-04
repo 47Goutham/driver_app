@@ -15,6 +15,10 @@ class HomeWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    UserDataInheritedWidget.of(context).userData.uid = FirebaseAuthService.currentFirebaseUser()!.uid ;
+    UserDataInheritedWidget.of(context).userData.nameReal = FirebaseAuthService.currentFirebaseUser()!.displayName ;
+    UserDataInheritedWidget.of(context).userData.phoneNumberReal = FirebaseAuthService.currentFirebaseUser()!.phoneNumber ;
+
     return FirebaseAuthService.currentFirebaseUser()!.displayName == null ? UserNameInputPage() : CompanySelectionPage()  ;
   }
 }

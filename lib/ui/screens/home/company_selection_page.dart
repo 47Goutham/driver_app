@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:driver_app/ui/widgets/user_data_inherited_widget.dart';
 
+import 'home.dart';
+
 class CompanySelectionPage extends StatelessWidget {
   const CompanySelectionPage({super.key});
 
@@ -65,7 +67,7 @@ class CompanySelectionPage extends StatelessWidget {
                         var offsetAnimation = animation.drive(tween);
                         return SlideTransition(
                             position: offsetAnimation,
-                            child: const VehicleSelectionPage()
+                            child: UserDataInheritedWidget.of(context).userData.currentVehicleReal == null ? const VehicleSelectionPage() : Home()
                         );
                       },
                       transitionDuration: const Duration(milliseconds: 300), // Increase the duration to slow down the animation
