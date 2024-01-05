@@ -1,5 +1,6 @@
 import 'package:driver_app/UI/screens/home/company_selection_page.dart';
 import 'package:driver_app/UI/screens/home/rr_account_selection_page.dart';
+import 'package:driver_app/services/database.dart';
 import 'package:driver_app/ui/screens/home/vehicle_selection_page.dart';
 import 'package:driver_app/ui/widgets/customer_outline_button.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,20 @@ class _HomeState extends State<Home> {
         height: 90,
         child: FloatingActionButton(
           onPressed: () {
-            print(UserDataInheritedWidget.of(context).userData);
+
+            setState(() {
+              UserDataInheritedWidget.of(context).userData.startStop = UserDataInheritedWidget.of(context).userData.startStop == 'START' ? 'STOP' : 'START';
+            });
+
+            Map<String, dynamic> data = {
+            'yandexId' : UserDataInheritedWidget.of(context).userData.yandexId,
+            'currentVehicleReal' : UserDataInheritedWidget.of(context).userData.currentVehicleReal?.name,
+            'workingCompany' : UserDataInheritedWidget.of(context).userData.workingCompany,
+            'start_stop': UserDataInheritedWidget.of(context).userData.startStop
+
+            };
+
+            FirebaseDataBaseService.pushDataAtUid(UserDataInheritedWidget.of(context).userData.uid!, data);
           },
           backgroundColor: Colors.yellow,
           shape: CircleBorder(),

@@ -13,6 +13,7 @@ class UserData {
   String? workRuleId;
   String? photoURL;
   String? workingCompany;
+  String? startStop;
 }
 
 
